@@ -1,0 +1,47 @@
+
+
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.cor-cabeçalho{
+    background-color: purple;
+    color: aliceblue;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    padding: 10px;
+    margin: 10px 0 0 ;
+}
+
+
+
+.form{
+    background-color: rgb(196, 36, 188);
+    color: aliceblue;
+    padding: 1px;
+    
+}
+
+input{
+  border-radius: 5px;
+  padding: 3px 50px 0 0;
+  margin: 5px;
+}
+
+
+button{
+    background-color:purple;
+    color: aliceblue;
+  margin: 5px;
+    border-radius: 3px;
+    box-shadow: 2px 2px 0 0;
+    
+
+   
+}
+

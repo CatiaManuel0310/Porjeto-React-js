@@ -1,0 +1,14 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.style{
+margin: 5px 5px 0 50px;
+background-color: rgb(231, 217, 235);
+border-radius: 5px;
+font-size: medium;
+padding: ;
+
+}
