@@ -1,5 +1,16 @@
 import React from "react";
 import './Contacto.css'
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+
+//faFileAlt,
+faTrashArrowUp
+} from "@fortawesome/free-solid-svg-icons";
+
+
+
+
+
 
 export default function Contacto(props){
     return(
@@ -8,10 +19,46 @@ export default function Contacto(props){
            <div className="col" ><strong>{props.nome} </strong></div>
            <div className="col" >{props.email} </div>
            <div className="col"> {props.telefone}</div>
- <div className="col"><button onClick= {() => 
-                {props.apagar ( props.id) }} >Apagar</button>
-        </div>
-        </div>
-        </div>
+
+
+
+          {/* <div className="col p-2 text-end">
+    <FontAwesomeIcon 
+    icon={faFileAlt } 
+    className="me-3"
+    onClick= {() =>  
+    {props.editar ( props.id) }} /></div> */}
+
+
+
+ <div className="col p-2 text-end">
+    <FontAwesomeIcon 
+    icon={faTrashArrowUp } 
+    className="me-3"
+    onClick= {() =>  
+    {props.apagar ( props.id) }} /> 
+    
+</div>
+     
+
+    
+
+
+      </div>
+      </div>             
+
+
+           
+
+    
+
+
+                
+
+       
+
+
+       
+        
     )
 }

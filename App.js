@@ -1,131 +1,177 @@
-import React, {useState, useRef, useEffect} from 'react';
-import { v4 as chaveuuid } from 'uuid';
-import Contacto from './Components/Contacto';
+import React, { useState, useRef, useEffect } from "react";
+import { v4 as chaveuuid } from "uuid";
+import Contacto from "./Components/Contacto";
+import "./App.css";
+//Adicionar ícones
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faAddressBook,
+  faUserPlus,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+
+
+
 
 export default function App() {
-//Vamos definir os States e useRef/ adicionar um Id
-  const [contacto, setContacto] = useState ({id: '', nome:'', telefone:'', email:''})
-  const [listaContactos, setListaContactos] = useState([0])
+  //Vamos definir os States e useRef/ adicionar um Id
+  const [contacto, setContacto] = useState({
+    id: "",
+    nome: "",
+    telefone: "",
+    email: "",
+  });
+  const [listaContactos, setListaContactos] = useState([0]);
 
+  const inputTelefone = useRef();
+  const inputEmail = useRef();
+  const inputNome = useRef();
 
-  const inputTelefone =useRef()
-  const inputEmail =useRef()
-  const inputNome =useRef()
-
- 
   //PARTE DAS FUNÇÕES
-  function criarNome(event){
-    setContacto({...contacto, nome: event.target.value})
+  function criarNome(event) {
+    setContacto({ ...contacto, nome: event.target.value });
   }
+
+  function criarTelefone(event) {
+    setContacto({ ...contacto, telefone: event.target.value });
+  }
+
+  function criarEmail(event) {
+    setContacto({ ...contacto, email: event.target.value });
+  }
+
+  function adicionarContacto() {
+    //Agora precisamos validar os campos dos contactos
+    if (
+      contacto.nome === "" ||
+      contacto.email === "" ||
+      contacto.telefone === ""
+    )
+      return;
+
   
-  function criarTelefone(event){
-    setContacto({...contacto, telefone: event.target.value})
-  }
 
-  function criarEmail(event){
-    setContacto({...contacto, email: event.target.value})
-  }
-
- function adicionarContacto(){
-  //Agora precisamos validar os campos dos contactos
-  if (contacto.nome === "" || contacto.email === ""  ||contacto.telefone === "") return
-
-  // Para impedir que os dados se repitam e colocar focus nos inputs
-  let replicar = listaContactos.find((contc) => contc.nome === contacto.nome && contc.email === contacto.email && contc.telefone === contacto.telefone)
-  if(typeof replicar !== 'undefined') {
-    inputTelefone.current.focus()
+    //Permite que possamos adicionar novos contactos à lista dos contactos
+    setListaContactos([...listaContactos, { ...contacto, id: chaveuuid() }]);
+    //Devemos limpar os campos dos contactos
+    setContacto({ nome: "", email: "", telefone: "" });
     inputNome.current.focus()
-     inputEmail.current.focus()
-    return
-     
   }
 
-//Permite que possamos adicionar novos contactos à lista dos contactos
-setListaContactos([...listaContactos, {...contacto, id: chaveuuid()}])
-//Devemos limpar os campos dos contactos
-setContacto({nome: '', email: '', telefone: ''})
-//inputNome.current.focus()
-
- }
-
-
-
- function TeclaAdicionar(event){
-if(event.code ==='Enter'){
-  adicionarContacto()
-}
- }
-
-
-//Procure os meus contactos, se encontar adiciona e mantem  na tela 
- useEffect(() =>{
-  if(localStorage.getItem('meus_contactos') !== null){
-    setListaContactos(JSON.parse(localStorage.getItem('meus_contactos')))
+  function TeclaAdicionar(event) {
+    if (event.code === "Enter") {
+      adicionarContacto();
+    }
   }
-}, [])
 
- //Guardar os dados para usá-los depois (localStorage)
- useEffect(() => {
-  localStorage.setItem('meus_contactos', JSON.stringify(listaContactos))
- },[listaContactos])
+  //Procure os meus contactos, se encontar adiciona e mantem  na tela
+  useEffect(() => {
+    if (localStorage.getItem("meus_contactos") !== null) {
+      setListaContactos(JSON.parse(localStorage.getItem("meus_contactos")));
+    }
+  }, []);
 
- //Quando queremos limpar tudo
- function apagarStorage(){
-  setListaContactos([])
- }
+  //Guardar os dados para usá-los depois (localStorage)
+  useEffect(() => {
+    localStorage.setItem("meus_contactos", JSON.stringify(listaContactos));
+  }, [listaContactos]);
+
+  //Quando queremos limpar tudo
+  function apagarStorage() {
+    setListaContactos([]);
+  }
+
+  //Quando queremos limpar um contacto apenas e apagá-lo no localStorage
+  function apagarContacto(id) {
+    let tep = listaContactos.filter((contc) => contc.id !== id);
+    setListaContactos(tep);
+  }
+
  
- //Quando queremos limpar um contacto apenas e apagá-lo no localStorage
- function apagarContacto(id){
- let tep = listaContactos.filter(contc => contc.id !== id) 
- setListaContactos(tep)
- }
- 
- // O QUE DESEJAMOS VER (retornar) NA TELA
- return (
-  <>
-    <h1>MINHA LISTA DE CONTACTOS</h1>
-    <hr/>
 
-     <div>
-     <label>NOME:</label>
-          <input type="text" ref={inputNome} onChange={criarNome} value= {contacto.nome} />
+
+  // O QUE DESEJAMOS VER (retornar) NA TELA
+  return (
+    <>
+      <h1 className="cor-cabeçalho">
+        <FontAwesomeIcon icon={faAddressBook} className="me-3" />
+        MEUS CONTACTOS
+      </h1>
+
+      <div className="container-fluid form">
+        <div className="row justify-content-center">
+          <div className="col-8 col-sm-6 col-md-4 col-lg-2">
+            <div>
+              <label className="form-label">NOME:</label>
+              <input
+                type="text" placeholder="Nome Completo"
+                ref={inputNome}
+                onChange={criarNome}
+                value={contacto.nome}
+              />
+            </div>
+
+            <div>
+              <label className="form-label">TELEF:</label>
+              <input
+                type="text" placeholder="Digite o telefone válido"
+                ref={inputTelefone}
+                onChange={criarTelefone}
+                onKeyUp={TeclaAdicionar}
+                value={contacto.telefone}
+              />
+            </div>
+
+            <div>
+              <label className="form-label">EMAIL:</label>
+              <input
+                type="email" placeholder="Digite o email válido"
+                ref={inputEmail}
+                onChange={criarEmail}
+                onKeyUp={TeclaAdicionar}
+                value={contacto.email} 
+              />
+            </div>
           </div>
-         
-
-       
-
-          <div>
-          <label>TELEFONE:</label>
-          <input type="text" ref={inputTelefone} onChange={criarTelefone} onKeyUp={TeclaAdicionar} value= {contacto.telefone} />
-          </div>
+        </div>
+      </div>
 
       
+        <div className="botn">
+          <button onClick={adicionarContacto}>
+            {" "}
+            <FontAwesomeIcon 
+            icon={faUserPlus} /> <strong>Adicionar</strong>
+          </button>
 
-          <div>
-          <label>EMAIL:</label>
-          <input type="email" ref={inputEmail} onChange={criarEmail} onKeyUp={TeclaAdicionar}  value= {contacto.email} />
-          </div>
-  
-
-          
-
-           <button onClick={adicionarContacto}>Adicionar Contacto</button>
-           <button onClick={apagarStorage}>Apagar Tudo</button>
-
-         <hr/>
-          
-
-        
-          {/*Mostrar lista dos contactos na tela */}
-             
-               {listaContactos.map((contc , index)=> { 
-                    return <Contacto key={index} id={contc.id} nome={contc.nome} email={contc.email} telefone={contc.telefone} apagar={apagarContacto}/>
-              })}
-
-              
+          <button onClick={apagarStorage}>
+            <FontAwesomeIcon 
+            icon={faTrash} 
+            className="me-2" />{" "}
+            <strong>Apagar tudo</strong>
+            </button>
             
-      </>
-    )
+        </div>
+        
+      
 
- }
+     
 
+      {/*Mostrar lista dos contactos na tela */}
+
+      {listaContactos.map((contc, index) => {
+        return (
+          <Contacto
+            key={index}
+            id={contc.id}
+            nome={contc.nome}
+            email={contc.email}
+            telefone={contc.telefone}
+            apagar={apagarContacto}
+            
+          />
+        );
+      })}
+    </>
+  );
+}
